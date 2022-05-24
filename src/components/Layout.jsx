@@ -1,23 +1,14 @@
 import React from 'react'
 import Navbar from './Navbar'
-import Search from './Search'
-import Select from './Select'
 
-const Layout = () =>
+
+const Layout = ( { children } ) =>
 {
+
     return (
         <>
             <Navbar />
-            <div className="container mt-4">
-                <div className="d-flex justify-content-between">
-                    <div>
-                        <Select />
-                    </div>
-                    <div>
-                        <Search />
-                    </div>
-                </div>
-            </div>
+            { children }
         </>
     )
 }
