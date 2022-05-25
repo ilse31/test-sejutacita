@@ -5,6 +5,7 @@ import Layout from '../components/Layout'
 
 const Favorites = () =>
 {
+      let navigate = useNavigate()
     let data = localStorage.getItem( "items" )
     data = JSON.parse( data )
     console.log( "inidata", data );
@@ -15,7 +16,7 @@ const Favorites = () =>
         data = JSON.parse( data )
         data = data.filter( item => item.bookTitle !== bookTitle )
         localStorage.setItem( "items", JSON.stringify( data ) )
-        window.location.reload()
+         navigate( '/' )
     }
 
     useEffect( () =>
