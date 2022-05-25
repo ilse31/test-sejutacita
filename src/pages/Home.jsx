@@ -6,13 +6,17 @@ import Layout from '../components/Layout'
 import Pagination from '../components/Pagination'
 import Search from '../components/Search'
 
+
 const Home = () =>
 {
-    const [ categories, setCategories ] = useState( [] )
+    const [ text, setText ] = useState( "Add To Favorites" )
+    const [ searchValue, setSearchValue ] = useState( "" )
+    const [ favorites, setFavorites ] = useState( [] )
+    const [ categories, setCategories ] = useState( [ { "id": 1, "name": "Happiness \u0026 Mindfulness" }, { "id": 11, "name": "Career \u0026 Business" }, { "id": 12, "name": "Productivity \u0026 Time Management" }, { "id": 19, "name": "Society \u0026 Politics" }, { "id": 21, "name": "Investment \u0026 Finance" } ] )
     const [ bookdata, setBookdata ] = useState( [] )
     const [ categoryID, setCategoryID ] = useState( 1 )
     const [ currentPage, setCurrentPage ] = useState( 1 )
-    const [ postPerPage ] = useState( 12 )
+    const [ postPerPage ] = useState( 10 )
     const [ loading, setLoading ] = useState( true )
     const getCategories = async () =>
     {
@@ -31,7 +35,6 @@ const Home = () =>
             .then( response =>
             {
                 setBookdata( response.data )
-                console.log( response.data );
                 setLoading( false )
             } ).catch( error =>
             {
@@ -43,6 +46,7 @@ const Home = () =>
     {
         getDataCategories()
         getCategories()
+        localStorage.setItem( 'items', JSON.stringify( favorites ) );
     }, [ loading, categoryID ] )
 
     const handleChange = ( e ) =>
@@ -51,6 +55,21 @@ const Home = () =>
         console.log( e.target.value );
         setCategoryID( e.target.value )
         console.log( categoryID );
+    }
+
+    const AddFavorites = ( bookID, bookTitle, cover_url, author ) =>
+    {
+        const newFavorites = {
+            bookID,
+            bookTitle,
+            cover_url,
+            author,
+            favorites: true
+        }
+        const newFavoritesList = [ ...favorites, newFavorites ]
+        setFavorites( newFavoritesList )
+        localStorage.setItem( 'items', JSON.stringify( newFavoritesList ) );
+        document.getElementById( bookID ).innerHTML = "Favorites"
     }
 
     const indexOfLastpost = currentPage * postPerPage
@@ -70,16 +89,20 @@ const Home = () =>
                         </select>
                     </div>
                     <div>
-                        <Search />
+                        <Search searchValue={ searchValue } onChange={ ( e ) => setSearchValue( e.target.value ) } />
                     </div>
                 </div>
             </div>
             <div className="container">
                 <div className="row gap-4 p-3 vh-100 justify-content-center">
                     {
-                        currentPost.map( ( book, index ) =>
-                            <Card key={ index } imgLink={ book.cover_url } titleImage={ book.title } author={ book.authors[ 0 ] } />
-                        )
+                        currentPost
+                            .filter( ( book ) =>
+                            {
+                                return book.title && book.authors[ 0 ].toLowerCase().includes( searchValue.toLowerCase() )
+                            } ).map( ( book, index ) =>
+                                <Card key={ index } id={ book.id } text={ text } imgLink={ book.cover_url } onClick={ () => AddFavorites( book.id, book.title, book.cover_url, book.authors ) } titleImage={ book.title } author={ book.authors[ 0 ] } />
+                            )
                     }
                     <div className='d-flex justify-content-center'>
                         <Pagination postPerPage={ postPerPage } totalPost={ bookdata.length } paginate={ paginate } />

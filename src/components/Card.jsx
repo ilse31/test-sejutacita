@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Card = ( { imgLink, titleImage, author, onChange } ) =>
+const Card = ( { imgLink, titleImage, author, onClick, text, id } ) =>
 {
     return (
         <div className='card p-0' style={ { width: '18rem' } }>
@@ -8,7 +8,7 @@ const Card = ( { imgLink, titleImage, author, onChange } ) =>
             <div className="card-body">
                 <p className="card-title">{ titleImage }</p>
                 <p className='text-muted'>{ author }</p>
-                <button onChange={ onChange } className='btn btn-primary'>Add to Favorites</button>
+                <button onClick={ onClick } type='submit' id={ id } className='btn btn-primary'>{ text }</button>
             </div>
         </div >
     )
