@@ -99,7 +99,7 @@ const Home = () =>
                         currentPost
                             .filter( ( book ) =>
                             {
-                                return book.title && book.authors[ 0 ].toLowerCase().includes( searchValue.toLowerCase() )
+                                return book.title.toLowerCase().includes( searchValue.toLowerCase() ) || book.authors[ 0 ].toLowerCase().includes( searchValue.toLowerCase() )
                             } ).map( ( book, index ) =>
                                 <Card key={ index } id={ book.id } text={ text } imgLink={ book.cover_url } onClick={ () => AddFavorites( book.id, book.title, book.cover_url, book.authors ) } titleImage={ book.title } author={ book.authors[ 0 ] } />
                             )
