@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import Card from '../components/Card'
 import Layout from '../components/Layout'
+import { useNavigate } from 'react-router-dom'
 
 
 const Favorites = () =>
